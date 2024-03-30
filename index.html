@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wire Length Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+    }
+    select, button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        box-sizing: border-box;
+    }
+    button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #result {
+        margin-top: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2>Wire Length Calculator</h2>
+    <label for="metal">Select Metal:</label>
+    <select id="metal">
+        <option value="silver_pure">Pure Silver</option>
+        <option value="silver_925">925 Silver</option>
+        <option value="gold_9k">9 K Gold</option>
+        <option value="gold_14k">14 K Gold</option>
+        <option value="gold_18k">18 K Gold</option>
+        <option value="gold_22k">22 K Gold</option>
+        <option value="gold_24k">24 K Gold</option>
+    </select>
+    <label for="weight">Weight (grams):</label>
+    <input type="number" id="weight" placeholder="Enter weight">
+    <label for="diameter">Diameter (mm):</label>
+    <input type="number" id="diameter" placeholder="Enter diameter">
+    <button onclick="calculateLength()">Calculate Length</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function calculateLength() {
+        var metal = document.getElementById('metal').value;
+        var weight = parseFloat(document.getElementById('weight').value);
+        var diameter = parseFloat(document.getElementById('diameter').value);
+        var densityOfMetal = getDensity(metal); // Get density based on selected metal
+        
+        var diameterCm = diameter / 10.0; // Convert diameter from mm to cm
+        var volume = Math.PI * Math.pow(diameterCm / 2.0, 2); // Calculate volume of wire
+        var length = (weight / densityOfMetal) / volume; // Calculate length of wire
+        
+        document.getElementById('result').innerText = "The length of the wire is approximately " + length.toFixed(2) + " centimeters.";
+    }
+    
+    function getDensity(metal) {
+        switch (metal) {
+            case "silver_pure":
+                return 10.49; // Density of pure silver in g/cm^3
+            case "silver_925":
+                return 10.36; // Density of 925 silver in g/cm^3
+            case "gold_9k":
+                return 10.6; // Density of 9 K gold in g/cm^3
+            case "gold_14k":
+                return 12.9; // Density of 14 K gold in g/cm^3
+            case "gold_18k":
+                return 15.6; // Density of 18 K gold in g/cm^3
+            case "gold_22k":
+                return 17.7; // Density of 22 K gold in g/cm^3
+            case "gold_24k":
+                return 19.32; // Density of 24 K gold in g/cm^3
+            default:
+                return 1; // Default density (in case of error)
+        }
+    }
+</script>
+</body>
+</html>
