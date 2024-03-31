@@ -3,28 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wire Length Calculator</title>
+<title>Tool Box - Wire Length & Metal Weight Calculator</title>
 <style>
     body {
         font-family: Arial, sans-serif;
     }
-    .container {
-        max-width: 400px;
-        margin: 0 auto;
-    }
-    input[type="number"] {
+    table {
         width: 100%;
-        padding: 10px;
-        margin: 5px 0;
-        box-sizing: border-box;
+        border-collapse: collapse;
     }
-    select, button {
-        width: 100%;
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    h2 {
+        margin-top: 0;
+    }
+    input[type="number"], select {
+        width: calc(100% - 16px);
         padding: 10px;
         margin: 5px 0;
         box-sizing: border-box;
     }
     button {
+        width: calc(100% - 16px);
+        padding: 10px;
         background-color: #4CAF50;
         color: white;
         border: none;
@@ -39,40 +46,109 @@
 </style>
 </head>
 <body>
-<div class="container">
-    <h2>Wire Length Calculator</h2>
-    <label for="metal">Select Metal:</label>
-    <select id="metal">
-        <option value="silver_pure">Pure Silver</option>
-        <option value="silver_925">925 Silver</option>
-        <option value="gold_9k">9 K Gold</option>
-        <option value="gold_14k">14 K Gold</option>
-        <option value="gold_18k">18 K Gold</option>
-        <option value="gold_22k">22 K Gold</option>
-        <option value="gold_24k">24 K Gold</option>
-    </select>
-    <label for="weight">Weight (grams):</label>
-    <input type="number" id="weight" placeholder="Enter weight">
-    <label for="diameter">Diameter (mm):</label>
-    <input type="number" id="diameter" placeholder="Enter diameter">
-    <button onclick="calculateLength()">Calculate Length</button>
-    <div id="result"></div>
-</div>
+<table>
+    <tr>
+        <td>
+            <section id="wireCalculation">
+                <h2>Wire Length Calculator</h2>
+                <label for="metal">Select Metal:</label>
+                <select id="metalWire">
+                    <option value="silver_pure">Pure Silver</option>
+                    <option value="silver_925">925 Silver</option>
+                    <option value="gold_9k">9 K Gold</option>
+                    <option value="gold_14k">14 K Gold</option>
+                    <option value="gold_18k">18 K Gold</option>
+                    <option value="gold_22k">22 K Gold</option>
+                    <option value="gold_24k">24 K Gold</option>
+                </select>
+                <label for="weightWire">Weight (grams):</label>
+                <input type="number" id="weightWire" placeholder="Enter weight">
+                <label for="diameterWire">Diameter (mm):</label>
+                <input type="number" id="diameterWire" placeholder="Enter diameter">
+                <button onclick="calculateWireLength()">Calculate Length</button>
+                <div id="resultWire"></div>
+            </section>
+        </td>
+        <td>
+            <section id="waxToMetal">
+                <h2>Convert Wax to Metal Weight</h2>
+                <label for="waxWeight">Wax Weight (grams):</label>
+                <input type="number" id="waxWeight" placeholder="Enter wax weight">
+                <button onclick="convertWaxToMetal()">Convert to Metal Weight</button>
+                <table id="waxResults" style="display: none;">
+                    <tr>
+                        <th>Metal</th>
+                        <th>Weight (grams)</th>
+                    </tr>
+                    <tr>
+                        <td>Pure Silver</td>
+                        <td id="pureSilverWeight"></td>
+                    </tr>
+                    <tr>
+                        <td>925 Silver</td>
+                        <td id="silver925Weight"></td>
+                    </tr>
+                    <tr>
+                        <td>9 K Gold</td>
+                        <td id="gold9kWeight"></td>
+                    </tr>
+                    <tr>
+                        <td>14 K Gold</td>
+                        <td id="gold14kWeight"></td>
+                    </tr>
+                    <tr>
+                        <td>18 K Gold</td>
+                        <td id="gold18kWeight"></td>
+                    </tr>
+                    <tr>
+                        <td>22 K Gold</td>
+                        <td id="gold22kWeight"></td>
+                    </tr>
+                    <tr>
+                        <td>24 K Gold</td>
+                        <td id="gold24kWeight"></td>
+                    </tr>
+                </table>
+            </section>
+        </td>
+    </tr>
+</table>
 
 <script>
-    function calculateLength() {
-        var metal = document.getElementById('metal').value;
-        var weight = parseFloat(document.getElementById('weight').value);
-        var diameter = parseFloat(document.getElementById('diameter').value);
+    function calculateWireLength() {
+        var metal = document.getElementById('metalWire').value;
+        var weight = parseFloat(document.getElementById('weightWire').value);
+        var diameter = parseFloat(document.getElementById('diameterWire').value);
         var densityOfMetal = getDensity(metal); // Get density based on selected metal
-        
+
         var diameterCm = diameter / 10.0; // Convert diameter from mm to cm
         var volume = Math.PI * Math.pow(diameterCm / 2.0, 2); // Calculate volume of wire
         var length = (weight / densityOfMetal) / volume; // Calculate length of wire
-        
-        document.getElementById('result').innerText = "The length of the wire is approximately " + length.toFixed(2) + " centimeters.";
+
+        document.getElementById('resultWire').innerText = "The length of the wire is approximately " + length.toFixed(2) + " centimeters.";
     }
-    
+
+    function convertWaxToMetal() {
+        var waxWeight = parseFloat(document.getElementById('waxWeight').value);
+        var pureSilverWeight = waxWeight * 11.6; // Wax to pure silver weight conversion
+        var silver925Weight = waxWeight * 11.6 * 0.925; // Wax to 925 silver weight conversion
+        var gold9kWeight = waxWeight * 21 * 0.375; // Wax to 9K gold weight conversion
+        var gold14kWeight = waxWeight * 21 * 0.585; // Wax to 14K gold weight conversion
+        var gold18kWeight = waxWeight * 21 * 0.75; // Wax to 18K gold weight conversion
+        var gold22kWeight = waxWeight * 21 * 0.916; // Wax to 22K gold weight conversion
+        var gold24kWeight = waxWeight * 21; // Wax to 24K gold weight conversion
+
+        document.getElementById('pureSilverWeight').innerText = pureSilverWeight.toFixed(2);
+        document.getElementById('silver925Weight').innerText = silver925Weight.toFixed(2);
+        document.getElementById('gold9kWeight').innerText = gold9kWeight.toFixed(2);
+        document.getElementById('gold14kWeight').innerText = gold14kWeight.toFixed(2);
+        document.getElementById('gold18kWeight').innerText = gold18kWeight.toFixed(2);
+        document.getElementById('gold22kWeight').innerText = gold22kWeight.toFixed(2);
+        document.getElementById('gold24kWeight').innerText = gold24kWeight.toFixed(2);
+        
+        document.getElementById('waxResults').style.display = 'table';
+    }
+
     function getDensity(metal) {
         switch (metal) {
             case "silver_pure":
